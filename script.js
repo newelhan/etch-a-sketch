@@ -1,20 +1,35 @@
 const mainGrid = document.querySelector('.main-grid');
-let loadGridSize = prompt('Please enter the grid amount', '16')
 
-generateGrid(loadGridSize);
+function setGridSize() {
+  while (true) {
+    let gridSize = prompt('Enter the grid amount (10-100)', '16')
+      if (isNaN(gridSize) || !gridSize) {
+        alert('Enter the proper amount')
+      } else if (gridSize > 100) {
+        alert('Grid size must be less than 100 spaces')
+      } else if (gridSize < 10) {
+        alert('Grid size must be more than 10 spaces')
+      } else {
+        return gridSize;
+      }
+  }
+}
+
 
 function generateGrid(amount) {
-  let gridInnerColumn = ``;
-  let gridColumn;
+  let gridColumns = ``;
 
   for (let i = 0; i < amount; i++) {
-    gridInnerColumn += `<div></div>`;
-    gridColumn = `<div class="grid-column">${gridInnerColumn}</div>`
+    let gridInnerColumn = ``;
+
+    for (let j = 0; j < amount; j++) {
+      gridInnerColumn += `<div></div>`;
+    };
+
+    gridColumns += `<div class="grid-column">${gridInnerColumn}</div>`
   };
 
-  for (let i = 0; i < amount; i++) {
-    mainGrid.insertAdjacentHTML('afterbegin', `${gridColumn}`);
-  };
+  mainGrid.innerHTML = gridColumns;
 
   //grid hover
   document.querySelectorAll('.grid-column div').forEach((element) => {
@@ -23,3 +38,10 @@ function generateGrid(amount) {
     });
   });
 };
+
+document.querySelector('.js-change-grid')
+  .addEventListener('onclick', () => {
+    generateGrid(setGridSize());
+  })
+
+generateGrid(setGridSize());
